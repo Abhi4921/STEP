@@ -1,88 +1,75 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /*
- * UC15: Safe Cargo Assignment Using try-catch-finally
+ * UC16: Sort Passenger Bogies by Capacity (Bubble Sort)
  */
 
-// Custom runtime exception
-class CargoSafetyException extends RuntimeException {
-    public CargoSafetyException(String message) {
-        super(message);
-    }
-}
+class PassengerBogie {
+    String name;
+    int capacity;
 
-// Goods bogie class
-class GoodsBogie {
-
-    private String shape;
-    private String cargo;
-
-    public GoodsBogie(String shape) {
-        this.shape = shape;
-        this.cargo = "None";
-    }
-
-    public String getShape() {
-        return shape;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void assignCargo(String cargoType) {
-        try {
-            // Unsafe rule: Rectangular bogie cannot carry Petroleum
-            if (shape.equalsIgnoreCase("Rectangular") &&
-                    cargoType.equalsIgnoreCase("Petroleum")) {
-                throw new CargoSafetyException(
-                        "Unsafe cargo assignment: Petroleum cannot be assigned to a Rectangular bogie."
-                );
-            }
-
-            this.cargo = cargoType;
-            System.out.println("Cargo assigned successfully: " + cargoType + " → " + shape + " bogie");
-
-        } catch (CargoSafetyException e) {
-            System.out.println("Error: " + e.getMessage());
-
-        } finally {
-            System.out.println("Cargo assignment check completed for " + shape + " bogie.");
-        }
+    public PassengerBogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
     }
 
     @Override
     public String toString() {
-        return shape + " Bogie [Cargo = " + cargo + "]";
+        return name + " (Capacity: " + capacity + ")";
     }
 }
 
 public class TrainConsistApp {
 
+    // Bubble Sort (Ascending by capacity)
+    public static void bubbleSort(List<PassengerBogie> bogies) {
+        int n = bogies.size();
+
+        for (int i = 0; i < n - 1; i++) {
+            boolean swapped = false;
+
+            for (int j = 0; j < n - i - 1; j++) {
+                if (bogies.get(j).capacity > bogies.get(j + 1).capacity) {
+                    // swap
+                    PassengerBogie temp = bogies.get(j);
+                    bogies.set(j, bogies.get(j + 1));
+                    bogies.set(j + 1, temp);
+                    swapped = true;
+                }
+            }
+
+            // Optimization: stop if already sorted
+            if (!swapped) break;
+        }
+    }
+
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println(" Train Consist Management App - UC15");
+        System.out.println(" Train Consist Management App - UC16");
         System.out.println("=====================================");
 
-        GoodsBogie cylindrical = new GoodsBogie("Cylindrical");
-        GoodsBogie rectangular = new GoodsBogie("Rectangular");
+        List<PassengerBogie> bogies = new ArrayList<>();
 
-        // Safe assignment
-        cylindrical.assignCargo("Petroleum");
+        bogies.add(new PassengerBogie("Sleeper", 72));
+        bogies.add(new PassengerBogie("AC Chair", 56));
+        bogies.add(new PassengerBogie("First Class", 24));
+        bogies.add(new PassengerBogie("General", 90));
 
-        System.out.println();
+        System.out.println("\nBefore Sorting:");
+        for (PassengerBogie b : bogies) {
+            System.out.println(b);
+        }
 
-        // Unsafe assignment
-        rectangular.assignCargo("Petroleum");
+        // Apply Bubble Sort
+        bubbleSort(bogies);
 
-        System.out.println();
+        System.out.println("\nAfter Sorting (Ascending by Capacity):");
+        for (PassengerBogie b : bogies) {
+            System.out.println(b);
+        }
 
-        // Program continues safely
-        rectangular.assignCargo("Coal");
-
-        System.out.println("\nFinal Bogie States:");
-        System.out.println(cylindrical);
-        System.out.println(rectangular);
-
-        System.out.println("\nProgram continues safely...");
+        System.out.println("\nProgram continues...");
     }
 }
