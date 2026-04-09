@@ -1,8 +1,8 @@
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
- * UC5: Preserve Insertion Order of Bogies (LinkedHashSet)
+ * UC6: Map Bogie to Capacity (HashMap)
  */
 
 public class TrainConsistApp {
@@ -10,30 +10,28 @@ public class TrainConsistApp {
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println(" Train Consist Management App - UC5");
+        System.out.println(" Train Consist Management App - UC6");
         System.out.println("=====================================");
 
-        // LinkedHashSet maintains insertion order + uniqueness
-        Set<String> trainFormation = new LinkedHashSet<>();
+        // Create HashMap for bogie-capacity mapping
+        Map<String, Integer> bogieCapacity = new HashMap<>();
 
-        // Add bogies
-        System.out.println("\nAttaching bogies...");
-        trainFormation.add("Engine");
-        trainFormation.add("Sleeper");
-        trainFormation.add("Cargo");
-        trainFormation.add("Guard");
+        // Insert bogie capacities
+        System.out.println("\nAdding bogie capacities...");
 
-        // Attempt to add duplicate
-        System.out.println("\nAttempting to add duplicate 'Sleeper'...");
-        boolean added = trainFormation.add("Sleeper"); // will be ignored
+        bogieCapacity.put("Sleeper", 72);
+        bogieCapacity.put("AC Chair", 60);
+        bogieCapacity.put("First Class", 24);
 
-        if (!added) {
-            System.out.println("Duplicate ignored: 'Sleeper' already exists.");
+        // Display all bogie capacities
+        System.out.println("\nBogie Capacity Details:");
+
+        for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
+            System.out.println(
+                    "Bogie: " + entry.getKey() +
+                            " | Capacity: " + entry.getValue()
+            );
         }
-
-        // Display final formation
-        System.out.println("\nFinal Train Formation (Insertion Order Preserved):");
-        System.out.println(trainFormation);
 
         System.out.println("\nProgram continues...");
     }
