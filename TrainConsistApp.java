@@ -1,69 +1,90 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /*
- * UC12: Safety Compliance Check for Goods Bogies
+ * UC13: Performance Comparison (Loops vs Streams)
  */
 
-// Goods Bogie class
-class GoodsBogie {
+class Bogie {
+    private String name;
+    private int capacity;
 
-    private String type;   // Cylindrical / Open / Box
-    private String cargo;  // Petroleum / Coal / Grain
-
-    public GoodsBogie(String type, String cargo) {
-        this.type = type;
-        this.cargo = cargo;
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public String getCargo() {
-        return cargo;
+    public int getCapacity() {
+        return capacity;
     }
 
     @Override
     public String toString() {
-        return type + " Bogie carrying " + cargo;
+        return name + " (Capacity: " + capacity + ")";
     }
 }
 
-public class TrainConsistApp {
+public class U13 {
 
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println(" Train Consist Management App - UC12");
+        System.out.println(" Train Consist Management App - UC13");
         System.out.println("=====================================");
 
-        // Create list of goods bogies
-        List<GoodsBogie> goodsBogies = new ArrayList<>();
+        // Create a large dataset
+        List<Bogie> bogies = generateBogies(200_000); // adjust size if needed
 
-        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum")); // valid
-        goodsBogies.add(new GoodsBogie("Open", "Coal"));             // valid
-        goodsBogies.add(new GoodsBogie("Box", "Grain"));             // valid
+        // -------- Loop-based filtering --------
+        long loopStart = System.nanoTime();
 
-        // Display bogies
-        System.out.println("\nGoods Bogies:");
-        goodsBogies.forEach(System.out::println);
-
-        // Safety check using allMatch
-        boolean isSafe = goodsBogies.stream()
-                .allMatch(b ->
-                        !b.getType().equalsIgnoreCase("Cylindrical") ||
-                                b.getCargo().equalsIgnoreCase("Petroleum")
-                );
-
-        // Display result
-        System.out.println("\nSafety Compliance Check:");
-        if (isSafe) {
-            System.out.println("Train is SAFE for operation.");
-        } else {
-            System.out.println("Train is NOT SAFE! Rule violation detected.");
+        List<Bogie> loopResult = new ArrayList<>();
+        for (Bogie b : bogies) {
+            if (b.getCapacity() > 60) {
+                loopResult.add(b);
+            }
         }
 
+        long loopEnd = System.nanoTime();
+        long loopTime = loopEnd - loopStart;
+
+        // -------- Stream-based filtering --------
+        long streamStart = System.nanoTime();
+
+        List<Bogie> streamResult = bogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+
+        long streamEnd = System.nanoTime();
+        long streamTime = streamEnd - streamStart;
+
+        // -------- Results --------
+        System.out.println("\nLoop Result Size   : " + loopResult.size());
+        System.out.println("Stream Result Size : " + streamResult.size());
+
+        System.out.println("\nLoop Time   (ns): " + loopTime);
+        System.out.println("Stream Time (ns): " + streamTime);
+
+        // Optional: convert to milliseconds for readability
+        System.out.println("\nLoop Time   (ms): " + loopTime / 1_000_000.0);
+        System.out.println("Stream Time (ms): " + streamTime / 1_000_000.0);
+
+        System.out.println("\nResults match: " + (loopResult.size() == streamResult.size()));
+
         System.out.println("\nProgram continues...");
+    }
+
+    // Helper to generate random dataset
+    private static List<Bogie> generateBogies(int size) {
+        List<Bogie> list = new ArrayList<>(size);
+        Random rand = new Random();
+
+        for (int i = 0; i < size; i++) {
+            int capacity = 20 + rand.nextInt(100); // random 20–119
+            list.add(new Bogie("Bogie-" + i, capacity));
+        }
+        return list;
     }
 }
