@@ -1,19 +1,30 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 /*
- * UC13: Performance Comparison (Loops vs Streams)
+ * UC14: Handle Invalid Bogie Capacity (Custom Exception)
  */
 
-class Bogie {
+// Custom exception
+class InvalidCapacityException extends Exception {
+    public InvalidCapacityException(String message) {
+        super(message);
+    }
+}
+
+// Passenger Bogie class with validation
+class PassengerBogie {
+
     private String name;
     private int capacity;
 
-    public Bogie(String name, int capacity) {
+    public PassengerBogie(String name, int capacity) throws InvalidCapacityException {
+        if (capacity <= 0) {
+            throw new InvalidCapacityException("Capacity must be greater than zero");
+        }
         this.name = name;
         this.capacity = capacity;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getCapacity() {
@@ -26,65 +37,36 @@ class Bogie {
     }
 }
 
-public class U13 {
+public class TrainConsistApp {
 
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println(" Train Consist Management App - UC13");
+        System.out.println(" Train Consist Management App - UC14");
         System.out.println("=====================================");
 
-        // Create a large dataset
-        List<Bogie> bogies = generateBogies(200_000); // adjust size if needed
+        try {
+            // Valid bogie
+            PassengerBogie sleeper = new PassengerBogie("Sleeper", 72);
+            System.out.println("\nCreated: " + sleeper);
 
-        // -------- Loop-based filtering --------
-        long loopStart = System.nanoTime();
+            // Invalid bogie (zero capacity)
+            PassengerBogie invalid1 = new PassengerBogie("AC Chair", 0);
+            System.out.println("Created: " + invalid1);
 
-        List<Bogie> loopResult = new ArrayList<>();
-        for (Bogie b : bogies) {
-            if (b.getCapacity() > 60) {
-                loopResult.add(b);
-            }
+        } catch (InvalidCapacityException e) {
+            System.out.println("\nError: " + e.getMessage());
         }
 
-        long loopEnd = System.nanoTime();
-        long loopTime = loopEnd - loopStart;
+        try {
+            // Invalid bogie (negative capacity)
+            PassengerBogie invalid2 = new PassengerBogie("First Class", -10);
+            System.out.println("Created: " + invalid2);
 
-        // -------- Stream-based filtering --------
-        long streamStart = System.nanoTime();
-
-        List<Bogie> streamResult = bogies.stream()
-                .filter(b -> b.getCapacity() > 60)
-                .collect(Collectors.toList());
-
-        long streamEnd = System.nanoTime();
-        long streamTime = streamEnd - streamStart;
-
-        // -------- Results --------
-        System.out.println("\nLoop Result Size   : " + loopResult.size());
-        System.out.println("Stream Result Size : " + streamResult.size());
-
-        System.out.println("\nLoop Time   (ns): " + loopTime);
-        System.out.println("Stream Time (ns): " + streamTime);
-
-        // Optional: convert to milliseconds for readability
-        System.out.println("\nLoop Time   (ms): " + loopTime / 1_000_000.0);
-        System.out.println("Stream Time (ms): " + streamTime / 1_000_000.0);
-
-        System.out.println("\nResults match: " + (loopResult.size() == streamResult.size()));
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
 
         System.out.println("\nProgram continues...");
-    }
-
-    // Helper to generate random dataset
-    private static List<Bogie> generateBogies(int size) {
-        List<Bogie> list = new ArrayList<>(size);
-        Random rand = new Random();
-
-        for (int i = 0; i < size; i++) {
-            int capacity = 20 + rand.nextInt(100); // random 20–119
-            list.add(new Bogie("Bogie-" + i, capacity));
-        }
-        return list;
     }
 }
