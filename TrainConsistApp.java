@@ -1,12 +1,12 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /*
- * UC7: Sort Bogies by Capacity (Comparator)
+ * UC8: Filter Passenger Bogies Using Streams
  */
 
-// Bogie class (custom object)
+// Reusing Bogie class from UC7
 class Bogie {
 
     private String name;
@@ -36,39 +36,37 @@ public class TrainConsistApp {
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println(" Train Consist Management App - UC7");
+        System.out.println(" Train Consist Management App - UC8");
         System.out.println("=====================================");
 
-        // Create list of bogies
+        // Create bogie list
         List<Bogie> bogies = new ArrayList<>();
 
-        // Add passenger bogies
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 56));
         bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Luxury", 80)); // extra for testing
 
-        // Display original order
+        // Display original list
         System.out.println("\nOriginal Bogie List:");
-        for (Bogie b : bogies) {
-            System.out.println(b);
+        bogies.forEach(System.out::println);
+
+        // Filter bogies with capacity > 60
+        List<Bogie> filteredBogies = bogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+
+        // Display filtered list
+        System.out.println("\nFiltered Bogies (Capacity > 60):");
+        if (filteredBogies.isEmpty()) {
+            System.out.println("No bogies match the condition.");
+        } else {
+            filteredBogies.forEach(System.out::println);
         }
 
-        // Sort using Comparator (ascending capacity)
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
-
-        // Display sorted list
-        System.out.println("\nBogies Sorted by Capacity (Ascending):");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
-
-        // Optional: Descending order
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity).reversed());
-
-        System.out.println("\nBogies Sorted by Capacity (Descending):");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
+        // Verify original list unchanged
+        System.out.println("\nOriginal List After Filtering (Unchanged):");
+        bogies.forEach(System.out::println);
 
         System.out.println("\nProgram continues...");
     }
