@@ -1,50 +1,35 @@
-import java.util.Arrays;
-
 public class TrainConsistApp {
 
     public static void main(String[] args) {
 
         System.out.println("=== Train Consist Management App ===");
-        System.out.println("UC19: Binary Search for Bogie ID\n");
+        System.out.println("UC20: Exception Handling During Search\n");
 
-        // Step 1: Bogie IDs (can be unsorted)
-        String[] bogieIds = {"BG309", "BG101", "BG550", "BG205", "BG412"};
+        // Step 1: Bogie array (try empty {} to test exception)
+        String[] bogieIds = {"BG101", "BG205", "BG309"};
 
-        // Step 2: Sort before binary search (required)
-        Arrays.sort(bogieIds);
+        // Step 2: Search key
+        String searchKey = "BG205";
 
-        System.out.println("Sorted Bogie IDs:");
-        System.out.println(Arrays.toString(bogieIds));
-
-        // Step 3: Search key
-        String searchKey = "BG309"; // change to test
-
-        int low = 0;
-        int high = bogieIds.length - 1;
+        // Step 3: Fail-fast validation
+        if (bogieIds.length == 0) {
+            throw new IllegalStateException("Cannot perform search: No bogies available in the train.");
+        }
 
         boolean found = false;
 
-        // Step 4: Binary Search
-        while (low <= high) {
-
-            int mid = (low + high) / 2;
-
-            int comparison = bogieIds[mid].compareTo(searchKey);
-
-            if (comparison == 0) {
-                System.out.println("\nBogie Found at index: " + mid);
+        // Step 4: Linear Search (can reuse UC18 logic)
+        for (int i = 0; i < bogieIds.length; i++) {
+            if (bogieIds[i].equals(searchKey)) {
+                System.out.println("Bogie Found at index: " + i);
                 found = true;
                 break;
-            } else if (comparison < 0) {
-                low = mid + 1;
-            } else {
-                high = mid - 1;
             }
         }
 
         // Step 5: Result
         if (!found) {
-            System.out.println("\nBogie NOT Found");
+            System.out.println("Bogie NOT Found");
         }
     }
 }
