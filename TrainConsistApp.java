@@ -1,20 +1,21 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
- * UC8: Filter Passenger Bogies Using Streams
+ * UC9: Group Bogies by Type (Collectors.groupingBy)
  */
 
-// Reusing Bogie class from UC7
+// Bogie class (extended with type/category)
 class Bogie {
 
     private String name;
     private int capacity;
+    private String type; // Passenger or Goods
 
-    public Bogie(String name, int capacity) {
+    public Bogie(String name, int capacity, String type) {
         this.name = name;
         this.capacity = capacity;
+        this.type = type;
     }
 
     public String getName() {
@@ -23,6 +24,10 @@ class Bogie {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override
@@ -36,36 +41,37 @@ public class TrainConsistApp {
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println(" Train Consist Management App - UC8");
+        System.out.println(" Train Consist Management App - UC9");
         System.out.println("=====================================");
 
         // Create bogie list
         List<Bogie> bogies = new ArrayList<>();
 
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-        bogies.add(new Bogie("First Class", 24));
-        bogies.add(new Bogie("Luxury", 80)); // extra for testing
+        bogies.add(new Bogie("Sleeper", 72, "Passenger"));
+        bogies.add(new Bogie("AC Chair", 56, "Passenger"));
+        bogies.add(new Bogie("First Class", 24, "Passenger"));
+        bogies.add(new Bogie("Rectangular", 100, "Goods"));
+        bogies.add(new Bogie("Cylindrical", 120, "Goods"));
+        bogies.add(new Bogie("Sleeper", 72, "Passenger")); // duplicate type example
 
         // Display original list
         System.out.println("\nOriginal Bogie List:");
         bogies.forEach(System.out::println);
 
-        // Filter bogies with capacity > 60
-        List<Bogie> filteredBogies = bogies.stream()
-                .filter(b -> b.getCapacity() > 60)
-                .collect(Collectors.toList());
+        // Group bogies by type
+        Map<String, List<Bogie>> groupedBogies = bogies.stream()
+                .collect(Collectors.groupingBy(Bogie::getType));
 
-        // Display filtered list
-        System.out.println("\nFiltered Bogies (Capacity > 60):");
-        if (filteredBogies.isEmpty()) {
-            System.out.println("No bogies match the condition.");
-        } else {
-            filteredBogies.forEach(System.out::println);
+        // Display grouped result
+        System.out.println("\nGrouped Bogies by Type:");
+
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            System.out.println("\nType: " + entry.getKey());
+            entry.getValue().forEach(System.out::println);
         }
 
         // Verify original list unchanged
-        System.out.println("\nOriginal List After Filtering (Unchanged):");
+        System.out.println("\nOriginal List After Grouping (Unchanged):");
         bogies.forEach(System.out::println);
 
         System.out.println("\nProgram continues...");
