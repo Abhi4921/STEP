@@ -1,50 +1,35 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /*
- * UC2: Add Passenger Bogies to Train (ArrayList Operations)
+ * UC3: Track Unique Bogie IDs (Set – HashSet)
  */
 
-public class TrainConsistApp {
+public class  TrainConsistApp {
 
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println(" Train Consist Management App - UC2");
+        System.out.println(" Train Consist Management App - UC3");
         System.out.println("=====================================");
 
-        // Create ArrayList for passenger bogies
-        List<String> passengerBogies = new ArrayList<>();
+        // Create HashSet for bogie IDs
+        Set<String> bogieIds = new HashSet<>();
 
-        // Add bogies
-        System.out.println("\nAdding Passenger Bogies...");
-        passengerBogies.add("Sleeper");
-        passengerBogies.add("AC Chair");
-        passengerBogies.add("First Class");
+        // Add bogie IDs (including duplicates)
+        System.out.println("\nAdding Bogie IDs...");
 
-        // Display bogies
-        System.out.println("\nCurrent Passenger Bogies:");
-        System.out.println(passengerBogies);
+        bogieIds.add("BG101");
+        bogieIds.add("BG102");
+        bogieIds.add("BG103");
+        bogieIds.add("BG101"); // Duplicate
+        bogieIds.add("BG102"); // Duplicate
 
-        // Remove a bogie
-        System.out.println("\nRemoving 'AC Chair' bogie...");
-        passengerBogies.remove("AC Chair");
+        // Display bogie IDs
+        System.out.println("\nFinal Unique Bogie IDs:");
+        System.out.println(bogieIds);
 
-        // Display after removal
-        System.out.println("\nAfter Removal:");
-        System.out.println(passengerBogies);
-
-        // Check existence
-        System.out.println("\nChecking if 'Sleeper' exists...");
-        if (passengerBogies.contains("Sleeper")) {
-            System.out.println("Sleeper bogie is present.");
-        } else {
-            System.out.println("Sleeper bogie is NOT present.");
-        }
-
-        // Final state
-        System.out.println("\nFinal Passenger Bogies:");
-        System.out.println(passengerBogies);
+        System.out.println("\nNote: Duplicate IDs are automatically ignored.");
 
         System.out.println("\nProgram continues...");
     }
