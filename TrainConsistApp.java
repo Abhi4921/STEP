@@ -1,16 +1,16 @@
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
- * UC9: Group Bogies by Type (Collectors.groupingBy)
+ * UC10: Count Total Seats in Train (reduce)
  */
 
-// Bogie class (extended with type/category)
+// Reusing Bogie structure
 class Bogie {
 
     private String name;
     private int capacity;
-    private String type; // Passenger or Goods
+    private String type;
 
     public Bogie(String name, int capacity, String type) {
         this.name = name;
@@ -18,16 +18,8 @@ class Bogie {
         this.type = type;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public int getCapacity() {
         return capacity;
-    }
-
-    public String getType() {
-        return type;
     }
 
     @Override
@@ -41,7 +33,7 @@ public class TrainConsistApp {
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println(" Train Consist Management App - UC9");
+        System.out.println(" Train Consist Management App - UC10");
         System.out.println("=====================================");
 
         // Create bogie list
@@ -50,29 +42,18 @@ public class TrainConsistApp {
         bogies.add(new Bogie("Sleeper", 72, "Passenger"));
         bogies.add(new Bogie("AC Chair", 56, "Passenger"));
         bogies.add(new Bogie("First Class", 24, "Passenger"));
-        bogies.add(new Bogie("Rectangular", 100, "Goods"));
-        bogies.add(new Bogie("Cylindrical", 120, "Goods"));
-        bogies.add(new Bogie("Sleeper", 72, "Passenger")); // duplicate type example
 
-        // Display original list
-        System.out.println("\nOriginal Bogie List:");
+        // Display bogies
+        System.out.println("\nBogie List:");
         bogies.forEach(System.out::println);
 
-        // Group bogies by type
-        Map<String, List<Bogie>> groupedBogies = bogies.stream()
-                .collect(Collectors.groupingBy(Bogie::getType));
+        // Stream → map → reduce
+        int totalSeats = bogies.stream()
+                .map(b -> b.getCapacity())   // extract capacity
+                .reduce(0, Integer::sum);    // sum all values
 
-        // Display grouped result
-        System.out.println("\nGrouped Bogies by Type:");
-
-        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
-            System.out.println("\nType: " + entry.getKey());
-            entry.getValue().forEach(System.out::println);
-        }
-
-        // Verify original list unchanged
-        System.out.println("\nOriginal List After Grouping (Unchanged):");
-        bogies.forEach(System.out::println);
+        // Display total capacity
+        System.out.println("\nTotal Seating Capacity: " + totalSeats);
 
         System.out.println("\nProgram continues...");
     }
