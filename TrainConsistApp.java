@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * UC1: Initialize Train and Display Consist Summary
+ * UC2: Add Passenger Bogies to Train (ArrayList Operations)
  */
 
 public class TrainConsistApp {
@@ -10,15 +10,42 @@ public class TrainConsistApp {
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println(" Train Consist Management App");
+        System.out.println(" Train Consist Management App - UC2");
         System.out.println("=====================================");
 
-        // Initialize train consist
-        List<String> trainConsist = new ArrayList<>();
+        // Create ArrayList for passenger bogies
+        List<String> passengerBogies = new ArrayList<>();
 
-        System.out.println("\nTrain initialized successfully.");
-        System.out.println("Initial Bogie Count: " + trainConsist.size());
+        // Add bogies
+        System.out.println("\nAdding Passenger Bogies...");
+        passengerBogies.add("Sleeper");
+        passengerBogies.add("AC Chair");
+        passengerBogies.add("First Class");
 
-        System.out.println("\nProgram ready for next operations...");
+        // Display bogies
+        System.out.println("\nCurrent Passenger Bogies:");
+        System.out.println(passengerBogies);
+
+        // Remove a bogie
+        System.out.println("\nRemoving 'AC Chair' bogie...");
+        passengerBogies.remove("AC Chair");
+
+        // Display after removal
+        System.out.println("\nAfter Removal:");
+        System.out.println(passengerBogies);
+
+        // Check existence
+        System.out.println("\nChecking if 'Sleeper' exists...");
+        if (passengerBogies.contains("Sleeper")) {
+            System.out.println("Sleeper bogie is present.");
+        } else {
+            System.out.println("Sleeper bogie is NOT present.");
+        }
+
+        // Final state
+        System.out.println("\nFinal Passenger Bogies:");
+        System.out.println(passengerBogies);
+
+        System.out.println("\nProgram continues...");
     }
 }
